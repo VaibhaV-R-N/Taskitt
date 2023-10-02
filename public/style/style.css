@@ -1,0 +1,264 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box
+}
+
+:root{
+    --background:#040D12;
+    --foreground:#183D3D;
+    --text:#93B1A6;
+    --extra:#5C8374;
+}
+
+body{
+    background-color: var(--background);
+    width: 100%;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+nav{
+    width: 100%;
+    background-color: var(--foreground);
+    padding: 0 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 15vh;
+    
+}
+
+nav> a{
+    text-decoration: none;
+    color: var(--text);
+}
+
+.options{
+    width: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10%;
+
+}
+
+.options>a{
+    text-decoration: none;
+    color: var(--text);
+}
+
+.login-cont{
+    /* background-color: var(--foreground); */
+    padding: 1em;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-70%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10%;
+
+}
+
+.login-cont > input{
+    text-align: center;
+    font-size: large;
+    width: 80%;
+    height: 20%;
+
+}
+
+.login-cont > h2{
+    color: var(--text);
+}
+
+.login-cont > button{
+    font-size: large;
+    width: 25%;
+    height: 20%;
+}
+
+.signup-cont{
+    /* background-color: var(--foreground); */
+    padding: 1em;
+    width: 50%;
+    height: 70%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10%;
+
+}
+
+.signup-cont > input{
+    text-align: center;
+    font-size: large;
+    width: 80%;
+    height: 20%;
+
+}
+
+.signup-cont > h2{
+    color: var(--text);
+}
+
+.signup-cont > button{
+    font-size: large;
+    width: 25%;
+    height: 20%;
+}
+
+.connection-cont{
+    padding: 1em;
+    width: 40%;
+    height: 100%;
+    background-color: var(--foreground);
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-40%);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 5fr;
+    border-radius: 0.5em;
+}
+
+.add-user-cont{
+    padding: 1em;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 0.5em;
+    grid-row: 1;
+    
+}
+
+.add-user-cont > button{
+    font-size: large;
+    height: 80%;
+    width: 20%;
+}
+
+.add-user-cont  > input{
+    font-size: large;
+    text-align: center;
+    width: 80%;
+    height: 80%;
+}
+
+.task-cont{
+    width: 70%;
+    height: 90%;
+    /* background-color: var(--foreground); */
+    padding: 1em;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    grid-template-rows: 1fr;
+}
+
+.add-task-cont{
+    padding: 1em;
+    grid-column: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10%;
+    border-right: 0.3em solid var(--foreground);
+}
+
+.add-task-cont > input{
+    width: 100%;
+    height: 10%;
+    text-align: center;
+    font-size: large;
+}
+
+.add-task-cont > textarea{
+    padding: 1em;
+    width: 100%;
+    height: 30%;
+    resize: none;
+    font-size: larger;
+    text-align: center;
+}
+
+.add-task-cont > button{
+    width: 30%;
+    height: 10%;
+}
+
+.add-task-cont > label{
+    width: 100%;
+    text-align: left;
+    color: var(--text);
+}
+
+.chat-cont{
+    width: 60%;
+    height: 120%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-40%);
+    padding: 1em;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 9fr 1fr;
+    gap: 1em;
+
+}
+
+.chats{
+    background-color: var(--foreground);
+    overflow-y: auto;
+    grid-row: 1;
+}
+
+.text-area{
+    grid-row: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.text-area> textarea{
+    resize: none;
+    padding: 1em;
+    height: 100%;
+    width: 80%;
+    
+}
+
+.text-area > button{
+    height: 100%;
+    width: 20%;
+}
+
+footer{
+    padding: 1em;
+    margin-top: 20%;
+    width: 100%;
+    height: 20%;
+    color: var(--text);
+    background-color: var(--foreground);
+}
