@@ -1,7 +1,8 @@
 const express = require('express')
 const passport = require('passport')
-const {User} = require('./models')
+const {User,Chat} = require('./models')
 const {asyncCatcher} = require('./middlewares')
+const {dateAndTime} = require('./utils')
 const AppError = require('./AppError')
 const BaseRouter  =  express.Router()
 const AccountRouter = express.Router()
@@ -27,14 +28,63 @@ ConnectionsRouter.get('/',(req,res,next)=>{
 .get('/task',(req,res,next)=>{
     res.render('task',{title:'assign task',message:checkError(req).message})
 })
-.get('/chat',(req,res,next)=>{
-    res.render('chat',{title:'chat',message:checkError(req).message})
-})
+.get('/chat/:id',(req,res,next)=>{
+    res.render('chat',{title:'chat',message:checkError(req).message,usrid:req.params.id})   
+ })
 .post('/add',asyncCatcher(async (req,res,next)=>{
     const userid = req.body.userid
     const user = await User.findOne({userid:userid})
+    const currentUser = req.user
+    const result = await User.find({$and : [{_id:currentUser._id},{connections : { $in : [user._id]}}]})
+    if(result.length > 0){
+        return res.json({err:'Connection already exists'})
+    }
+    await User.updateOne({_id:currentUser._id},{$push: {connections:user._id}})
+    await User.updateOne({_id:user._id},{$push: {connections:currentUser._id}})
+    await new Chat({
+        users:[user._id,currentUser._id],
+
+    }).save()
+
     res.json({user})
 }))
+.post('/getconnections/:id',asyncCatcher(async (req,res,next)=>{
+    const id = req.params.id
+    const user = await User.findById(id).populate('connections')
+    res.json({connections:user.connections})
+}))
+.post('/delete/:id',asyncCatcher(async (req,res,next)=>{
+
+    const user = await User.findOne({userid:req.params.id})
+    const currentUser = req.user
+
+    await User.updateOne({_id:currentUser._id},{$pull:{connections:user._id}})
+    await User.updateOne({_id:user._id},{$pull:{connections:currentUser._id}})
+    res.json({})
+
+}))
+.post('/chat/:id',asyncCatcher(async (req,res,next)=>{
+    const userid = req.params.id
+    const user = await User.findOne({userid:userid})
+    const currentUser = req.user
+    const message = req.body.message
+
+    const chat = await Chat.findOne({$and:[{users:{$in:[user._id]}},{users:{$in:[currentUser._id]}}]})
+    await Chat.updateOne({_id:chat._id},{$push:{messages:{user:currentUser._id,message,dateandtime:dateAndTime()}}})
+
+    res.json({count:chat.messages.length,chatuser:user})
+}))
+.post('/chat/:id/messages',asyncCatcher(async (req,res,next)=>{
+    const userid = req.params.id
+    const user = await User.findOne({userid:userid})
+    const currentUser = req.user
+
+    const chat = await Chat.findOne({$and:[{users:{$in:[user._id]}},{users:{$in:[currentUser._id]}}]})
+    if(chat.messages)
+        return res.json(chat.messages)
+    return res.json([])
+}))
+
 
 
 AccountRouter.get('/login',(req,res,next)=>{

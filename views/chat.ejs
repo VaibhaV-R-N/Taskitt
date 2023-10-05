@@ -1,9 +1,13 @@
 <%- include('partials/header') %>
     <div class="chat-cont">
-        <div class="chats"></div>
+        <div class="chat-cont-inner"></div>
         <div class="text-area">
-            <textarea name="message" id="" cols="30" rows="10"></textarea>
-            <button>send</button>
+            <textarea class="message" name="message" id="" cols="30" rows="10"></textarea>
+            <button class="send">send</button>
         </div>
     </div>
+    <script>
+        let usrid = '<%- usrid%>'
+    </script>
+    <script src="/public/js/chat.js"></script>
 <%- include('partials/footer') %>

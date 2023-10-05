@@ -10,12 +10,14 @@
     --text:#93B1A6;
     --extra:#5C8374;
 }
-
+html{
+    overflow: auto;
+}
 body{
     background-color: var(--background);
     width: 100%;
     height: 100vh;
-    overflow-y: auto;
+    overflow: auto;
 }
 
 nav{
@@ -123,7 +125,7 @@ nav> a{
     padding: 1em;
     width: 40%;
     height: 100%;
-    background-color: var(--foreground);
+    border: 1px solid var(--foreground);
     position: relative;
     left: 50%;
     top: 50%;
@@ -211,27 +213,31 @@ nav> a{
 }
 
 .chat-cont{
-    width: 60%;
-    height: 120%;
+    border: 1px solid var(--foreground);
+    border-radius: 0.5em;
+    width: 45%;
+    height: 90%;
     position: relative;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-40%);
+    transform: translate(-50%,-50%);
     padding: 1em;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 9fr 1fr;
+    grid-template-rows: 80% 20%;
     gap: 1em;
 
 }
 
-.chats{
-    background-color: var(--foreground);
+.chat-cont-inner{
     overflow-y: auto;
+    grid-column: 1;
     grid-row: 1;
 }
 
 .text-area{
+    padding: 0.5em;
+    grid-column: 1;
     grid-row: 2;
     width: 100%;
     height: 100%;
@@ -301,4 +307,85 @@ footer{
     word-break: break-all;
     overflow-y: auto;
 
+}
+
+
+.chats{
+    display: grid;
+    overflow-y: auto;
+    grid-row: 2;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 7em;
+    gap: 1em;
+
+}
+
+
+.connection-inner-cont{
+    padding: 0.5em;
+    position: relative;
+    left: 2.5%;
+    width: 95%;
+    height: 100%;
+    background-color: var(--foreground);
+    border-radius: 0.5em;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50% 50%;
+    gap: 0.4em;
+
+}
+
+
+.connection-options{
+    padding: 0.5em;
+    width: 100%;
+    height: 100%;
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30%;
+
+   
+}
+
+.connection-options > img{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    object-fit: contain;
+}
+
+.user-title-cont{
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    grid-row: 1;
+    grid-column: 1;
+}
+
+.user-title-cont > h3{
+    color: var(--text);
+}
+
+.mychat , .otherchat{
+    width: 100%;
+    padding: 1em;
+    height: fit-content;
+    color: var(--text);
+}
+
+.mychat>h4 , .otherchat>h4{
+    color: var(--text);
+}
+
+.mychat{
+    text-align: right;
+}
+
+.otherchat{
+    text-align: left;
 }

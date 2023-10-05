@@ -16,28 +16,37 @@ const UserSchema = new Schema({
     userid:{
         type:String
     },
-    chats:[{
-        user:{
-            type:mongoose.Types.ObjectId,
-            ref:'User'
-        },
-        history:[{
-            type:mongoose.Types.ObjectId,
-            ref:'Chat'
-        }]
+    // chats:[{
+    //     user:{
+    //         type:mongoose.Types.ObjectId,
+    //         ref:'User'
+    //     },
+    //     history:[{
+    //         type:mongoose.Types.ObjectId,
+    //         ref:'Chat'
+    //     }]
+    // }],
+    connections:[{
+        type:mongoose.Types.ObjectId,
+        ref:'User'
     }]
 })
 
 UserSchema.plugin(passportLocalMongoose)
 
 const ChatSchema = new Schema({
-    user:{
+    users:[{
         type:mongoose.Types.ObjectId,
         ref:'User'
-    },
-    message:{
-        type:String,
-    }
+    }],
+    messages:[{
+        user:{
+            type:mongoose.Types.ObjectId,
+            ref:'User'
+        },
+        message:String,
+        dateandtime:String
+    }]
 })
 
 const User = mongoose.model('User',UserSchema)
