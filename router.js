@@ -1,39 +1,84 @@
 const express = require('express')
 const passport = require('passport')
-const {User,Chat} = require('./models')
+const {User,Chat,Task} = require('./models')
 const {asyncCatcher} = require('./middlewares')
 const {dateAndTime} = require('./utils')
 const AppError = require('./AppError')
+const {isLoggedIn,isLoggedInBTS} = require('./middlewares')
 const BaseRouter  =  express.Router()
 const AccountRouter = express.Router()
 const ConnectionsRouter = express.Router()
 
 const checkError = (req)=>{
+
     const message = req.session.message?req.session.message:undefined
     delete req.session.message
-    return {message}
+
+    return message
 }
 
-
 BaseRouter.get('/',(req,res,next)=>{
-    res.render('home',{title:'home',message:checkError(req).message})
+    res.render('home',{title:'home',message:checkError(req)})
 })
-.get('/taskpanel',(req,res,next)=>{
-    res.render('taskpanel',{title:'task panel',message:checkError(req).message})
-})
+.get('/taskpanel',isLoggedIn,asyncCatcher(async (req,res,next)=>{
 
-ConnectionsRouter.get('/',(req,res,next)=>{
-    res.render('connections',{title:'connections',message:checkError(req).message})
+    res.render('taskpanel',{title:'task panel',message:checkError(req)})
+}))
+.post('/taskpanel/my',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
+    const my = await Task.find({to:req.user._id}).populate('to').populate('from')
+    res.json(my)
+}))
+.post('/taskpanel/other',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
+    const other = await Task.find({from:req.user._id}).populate('to')
+    res.json(other)
+}))
+.post('/taskpanel/update/progress/:id',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
+        const updated = await Task.findByIdAndUpdate(req.params.id,{progress:req.body.progress},{new:true})
+        res.json(updated)
+}))
+.get('/taskpanel/task/:id/logs/',isLoggedIn,asyncCatcher(async (req,res,next)=>{
+    const task = await Task.findById(req.params.id)
+
+    res.render('logs',{logs:task.logs,title:'logs',message:checkError(req)})
+}))
+.post('/taskpanel/task/:id/logs/',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
+    await Task.findByIdAndUpdate(req.params.id,{$push:{logs:{log:req.body.log,dateandtime:dateAndTime()}}})
+    res.json({})
+}))
+.post('/taskpanel/task/completed/:id',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
+    await Task.findByIdAndUpdate(req.params.id,{completed:true})
+    res.json({})
+}))
+.post('/taskpanel/task/delete/:id',asyncCatcher(async (req,res,next)=>{
+    await Task.findByIdAndDelete(req.params.id)
+    res.json({})
+}))
+
+ConnectionsRouter.get('/',isLoggedIn,(req,res,next)=>{
+
+    res.render('connections',{title:'connections',message:checkError(req)})
 })
-.get('/task',(req,res,next)=>{
-    res.render('task',{title:'assign task',message:checkError(req).message})
+.get('/task/:id',isLoggedIn,(req,res,next)=>{
+    res.render('task',{title:'assign task',message:checkError(req),userid:req.params.id})
 })
-.get('/chat/:id',(req,res,next)=>{
-    res.render('chat',{title:'chat',message:checkError(req).message,usrid:req.params.id})   
+.post('/task/:id',isLoggedIn,asyncCatcher(async (req,res,next)=>{
+    const task = req.body.task
+    const to = await User.findOne({userid:req.params.id})
+    task.to  = to._id
+    task.from = req.user._id
+    const newTask = await new Task(task).save()
+    // res.redirect('/taskpanel')
+    res.render('taskpanel',{title:'task panel',message:checkError(req)})
+}))
+.get('/chat/:id',isLoggedIn,(req,res,next)=>{
+    res.render('chat',{title:'chat',message:checkError(req),usrid:req.params.id})   
  })
-.post('/add',asyncCatcher(async (req,res,next)=>{
+.post('/add',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
     const userid = req.body.userid
     const user = await User.findOne({userid:userid})
+    if(!user._id){
+        next(new AppError('User does not exist.','500'))
+    }
     const currentUser = req.user
     const result = await User.find({$and : [{_id:currentUser._id},{connections : { $in : [user._id]}}]})
     if(result.length > 0){
@@ -48,12 +93,12 @@ ConnectionsRouter.get('/',(req,res,next)=>{
 
     res.json({user})
 }))
-.post('/getconnections/:id',asyncCatcher(async (req,res,next)=>{
+.post('/getconnections/:id',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
     const id = req.params.id
     const user = await User.findById(id).populate('connections')
     res.json({connections:user.connections})
 }))
-.post('/delete/:id',asyncCatcher(async (req,res,next)=>{
+.post('/delete/:id',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
 
     const user = await User.findOne({userid:req.params.id})
     const currentUser = req.user
@@ -63,7 +108,7 @@ ConnectionsRouter.get('/',(req,res,next)=>{
     res.json({})
 
 }))
-.post('/chat/:id',asyncCatcher(async (req,res,next)=>{
+.post('/chat/:id',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
     const userid = req.params.id
     const user = await User.findOne({userid:userid})
     const currentUser = req.user
@@ -72,9 +117,9 @@ ConnectionsRouter.get('/',(req,res,next)=>{
     const chat = await Chat.findOne({$and:[{users:{$in:[user._id]}},{users:{$in:[currentUser._id]}}]})
     await Chat.updateOne({_id:chat._id},{$push:{messages:{user:currentUser._id,message,dateandtime:dateAndTime()}}})
 
-    res.json({count:chat.messages.length,chatuser:user})
+    res.json({})
 }))
-.post('/chat/:id/messages',asyncCatcher(async (req,res,next)=>{
+.post('/chat/:id/messages',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
     const userid = req.params.id
     const user = await User.findOne({userid:userid})
     const currentUser = req.user
@@ -84,14 +129,18 @@ ConnectionsRouter.get('/',(req,res,next)=>{
         return res.json(chat.messages)
     return res.json([])
 }))
-
+.post('/chat/:id/count',isLoggedInBTS,asyncCatcher(async (req,res,next)=>{
+    const user = await User.findOne({userid:req.params.id})
+    const chat = await Chat.findOne({$and: [{users:{$in:[user._id]}},{users:{$in:[req.user._id]}}]})
+    res.json({count:chat.messages.length}) 
+}))
 
 
 AccountRouter.get('/login',(req,res,next)=>{
-    res.render('login',{title:'login',message:checkError(req).message})
+    res.render('login',{title:'login',message:checkError(req)})
 })
 .get('/signup',(req,res,next)=>{
-    res.render('signup',{title:'signup',message:checkError(req).message})
+    res.render('signup',{title:'signup',message:checkError(req)})
 })
 .post('/signup',asyncCatcher(async (req,res,next)=>{
     const newUser = new User({username:req.body.username})

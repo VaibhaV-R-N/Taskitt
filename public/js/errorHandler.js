@@ -1,7 +1,7 @@
 const outer  = document.querySelector('.err-cont')
 const inner  = document.querySelector('.err-msg')
 
-if(message !== 'undefined' && message !== undefined && message !== ''){
+if((message !== 'undefined') && (message !== undefined) && (message !== '')){
     outer.style.display = 'block'
     inner.innerHTML = message
 }

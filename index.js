@@ -43,7 +43,8 @@ app.use('/account',AccountRouter)
 app.use('/connections',ConnectionsRouter)
 
 app.use((err,req,res,next)=>{
-    console.log(err);
-    req.session.message = err.message
+
+    const {message='something went wrong'} = err
+    req.session.message = message
     res.redirect(req.originalUrl)
 })

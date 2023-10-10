@@ -1,8 +1,8 @@
 const AppError = require('./AppError')
 
 const asyncCatcher = (fn)=>{
-    return async function(req,res,next){
-        await fn(req,res,next).catch(e=>{
+    return function(req,res,next){
+        fn(req,res,next).catch(e=>{
             next(new AppError(e.message,'500'))
         })
     }

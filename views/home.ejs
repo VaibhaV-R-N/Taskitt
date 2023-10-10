@@ -1,3 +1,15 @@
 <%- include('partials/header.ejs') %>
-
+<article>
+    <h1>Streamline Communication and Task Assignment</h1>
+    <h3>Welcome to Taskitt!</h3>
+    <h4>Unlock the power of seamless communication and efficient task management. Our platform empowers teams to collaborate effortlessly, assign tasks with ease, and achieve their goals together.</h4>
+    <button class="getstarted">
+        Get Started
+    </button>
+</article>
+    <script>
+        document.querySelector('.getstarted').addEventListener('click',e=>{
+            window.location.href = '/account/signup'
+        })
+    </script>
 <%- include('partials/footer.ejs') %>

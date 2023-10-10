@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<div class="log-cont">
+    <% for(let log of logs){ %>
+        <h5><%= log.dateandtime %>&nbsp;<%= log.log %></h5>
+    <% } %>
+</div>
+<%- include('partials/footer') %>

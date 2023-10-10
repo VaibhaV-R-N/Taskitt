@@ -45,9 +45,17 @@ const Connection  = class{
         })
 
         this.delete.addEventListener('click', async e=>{
-            await fetch(`/connections/delete/${this.user.userid}`,{
-                method:'POST'
+            const result = await fetch(`/connections/delete/${this.user.userid}`,{
+                method:'POST',
+                headers:{
+                    'Accept':'applications/json'
+                }
             })
+            const resObj = await result.json()
+            if(resObj.re){
+                window.location.href = resObj.re
+                return
+            }
             chats.removeChild(this.connectionCont)
         })
 
@@ -66,6 +74,10 @@ const initConnections = async ()=>{
     })
 
     const jsonRes = await result.json()
+    if(jsonRes.re){
+        window.location.href = jsonRes.re
+        return
+    }
     if(jsonRes.connections){
         for(let user of jsonRes.connections){
             new Connection(user)

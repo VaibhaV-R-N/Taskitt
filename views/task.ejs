@@ -1,14 +1,11 @@
 <%- include('partials/header') %>
-<div class="task-cont">
-    <div class="add-task-cont">
-        <input type="text" name="title" placeholder="task title" required>
-        <textarea name="description" id="" cols="30" rows="10" placeholder="description"></textarea>
+<form target="<%= `/connections/task/${userid}` %>" method="post" class="task-cont">
+ 
+        <input type="text" name="task[title]" placeholder="task title" required>
+        <textarea name="task[description]" id="" cols="30" rows="10" placeholder="description"></textarea>
         <label for="deadline">deadline</label>
-        <input type="date" name="deadline" id="deadline" placeholder="deadline">
-        <button>add</button>
-    </div>
-    <div class="tasks-cont">
+        <input type="date" name="task[deadline]" id="deadline" placeholder="deadline">
+        <button>assign</button>
+</form>
 
-    </div>
-</div>
 <%- include('partials/footer') %>

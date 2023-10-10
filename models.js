@@ -16,16 +16,6 @@ const UserSchema = new Schema({
     userid:{
         type:String
     },
-    // chats:[{
-    //     user:{
-    //         type:mongoose.Types.ObjectId,
-    //         ref:'User'
-    //     },
-    //     history:[{
-    //         type:mongoose.Types.ObjectId,
-    //         ref:'Chat'
-    //     }]
-    // }],
     connections:[{
         type:mongoose.Types.ObjectId,
         ref:'User'
@@ -49,9 +39,43 @@ const ChatSchema = new Schema({
     }]
 })
 
+const  TaskSchema = new Schema({
+    from:{
+        type:mongoose.Types.ObjectId,
+        ref:'User'
+    },
+    to:{
+        type:mongoose.Types.ObjectId,
+        ref:'User'
+    },
+    title:{
+        type:String,
+        required:true
+    },
+    description:{
+        type:String,
+        required:true
+    },
+    deadline:{
+        type:String,
+        required:true
+    },
+    logs:[{
+        log:String,
+        dateandtime:String
+    }],
+    progress:{
+        type:Number,
+        default:0
+    },
+    completed:{
+        type:Boolean,
+        default:false
+    }
+})
+
 const User = mongoose.model('User',UserSchema)
 const Chat = mongoose.model('Chat',ChatSchema)
+const Task = mongoose.model('Task',TaskSchema)
 
-
-
-module.exports = {User,Chat}
+module.exports = {User,Chat,Task}

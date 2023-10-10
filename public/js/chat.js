@@ -4,7 +4,10 @@ const send = document.querySelector('.send')
 
 let messageCount = 0
 let prevCount = 0
-let chatUser
+
+if(user)
+    user = JSON.parse(user)
+
 send.addEventListener('click',async e=>{
     if(textarea.value !== '' && usrid){
         const data = new URLSearchParams()
@@ -17,13 +20,10 @@ send.addEventListener('click',async e=>{
             },
             body:data
         })
-
-        const {count,chatuser} = await result.json()
-        chatUser = chatuser 
-        if(count && count !== messageCount){
-            prevCount = messageCount
-            messageCount = count
-           
+        const resObj = await result.json()
+        if(resObj.re){
+            window.location.href = resObj.re
+            return
         }
         textarea.value = ''
     }  
@@ -37,15 +37,16 @@ const Message = class {
         this.user = message.user
         this.container = document.createElement('div')
         this.paragraph = document.createElement('p')
-        this.h4 = document.createElement('h4')
-        this.h4.innerHTML = this.message.dateandtime
-        if(this.user._id===user._id){
+        this.h6 = document.createElement('h6')
+        this.h6.innerHTML = this.message.dateandtime
+   
+        if(this.user===user._id){
             this.container.classList.add('mychat')
         }else{
             this.container.classList.add('otherchat')
         }
         this.container.innerText = this.message.message
-        this.container.appendChild(this.h4)
+        this.container.appendChild(this.h6)
         chatContainer.appendChild(this.container)
     }
 }
@@ -59,15 +60,34 @@ const fetchMessages = async()=>{
     })
     chatContainer.innerHTML =''
     const resObj = await result.json()
+    if(resObj.re){
+        window.location.href = resObj.re
+        return
+    }
     for(let message of resObj){
         new Message(message)
     }
-
+    chatContainer.scrollTop = chatContainer.scrollHeight
 }
-fetchMessages()
 
 const refreshMessages = async ()=>{
-   
+    const result  = await  fetch(`/connections/chat/${usrid}/count`,{
+        method:'POST',
+        headers:{
+            'Accept':'application/json'
+        }
+    })
+    const resObj = await result.json()
+    if(resObj.re){
+        window.location.href = resObj.re
+        return
+    }
+    const count = resObj.count
+    if(count && count !== messageCount){
+        prevCount = messageCount
+        messageCount = count
+    }
+
     if(prevCount !== messageCount){
         fetchMessages()
         prevCount = messageCount

@@ -1,2 +1,14 @@
 <%- include('partials/header') %>
+<div class="dashboard">
+    <h3><%= user.username %></h3>
+    <h3><%= `userid[ ${user.userid} ]` %></h3>
+</div>
+<div class="taskpanel">
+    <h2 class="my">My Tasks</h2>
+    <h2 class="others">Assigned Tasks</h2>
+    <div class="all-tasks">
+        
+    </div>
+</div>
+<script src="/public/js/taskpanel.js"></script>
 <%- include('partials/footer') %>

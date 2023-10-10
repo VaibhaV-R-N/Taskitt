@@ -1,14 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 *{
     padding: 0;
     margin: 0;
-    box-sizing: border-box
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 :root{
-    --background:#040D12;
-    --foreground:#183D3D;
-    --text:#93B1A6;
-    --extra:#5C8374;
+    /* --background:#040D12; */
+    --background:#000000;
+    /* --foreground:#183D3D; */
+    --foreground:#51424f;
+    /* --text:#93B1A6; */
+    --text:#ec87e4;
+
+    --extra:#FF95C5;
 }
 html{
     overflow: auto;
@@ -29,11 +36,13 @@ nav{
     justify-content: space-between;
     height: 15vh;
     
+    
 }
 
 nav> a{
     text-decoration: none;
     color: var(--text);
+    font-family: 'Anton', sans-serif !important;
 }
 
 .options{
@@ -51,6 +60,36 @@ nav> a{
     color: var(--text);
 }
 
+article{
+    text-align: center;
+    color: var(--text);
+    width: 50%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-40%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15%;
+    flex-direction: column;
+}
+
+article > h1{
+    font-size: 3em;
+}
+article > h3{
+    font-size: 2em;
+}
+article > h4{
+    font-size: 1em;
+}
+
+article > button{
+    width: 40%;
+    height: 15%;
+}
 .login-cont{
     /* background-color: var(--foreground); */
     padding: 1em;
@@ -160,21 +199,14 @@ nav> a{
     height: 80%;
 }
 
+
 .task-cont{
-    width: 70%;
-    height: 90%;
-    /* background-color: var(--foreground); */
-    padding: 1em;
+    width: 50%;
+    height: 80%;
     position: relative;
     left: 50%;
     top: 50%;
     transform: translate(-50%,-50%);
-    display: grid;
-    grid-template-columns: 4fr 7fr;
-    grid-template-rows: 1fr;
-}
-
-.add-task-cont{
     padding: 1em;
     grid-column: 1;
     display: flex;
@@ -182,31 +214,30 @@ nav> a{
     justify-content: center;
     flex-direction: column;
     gap: 10%;
-    border-right: 0.3em solid var(--foreground);
 }
 
-.add-task-cont > input{
+.task-cont > input{
     width: 100%;
-    height: 10%;
+    height: 15%;
     text-align: center;
     font-size: large;
 }
 
-.add-task-cont > textarea{
+.task-cont > textarea{
     padding: 1em;
     width: 100%;
-    height: 30%;
+    height: 35%;
     resize: none;
     font-size: larger;
     text-align: center;
 }
 
-.add-task-cont > button{
+.task-cont > button{
     width: 30%;
-    height: 10%;
+    height: 15%;
 }
 
-.add-task-cont > label{
+.task-cont > label{
     width: 100%;
     text-align: left;
     color: var(--text);
@@ -267,6 +298,10 @@ footer{
     height: 20%;
     color: var(--text);
     background-color: var(--foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .err-cont{
@@ -309,6 +344,53 @@ footer{
 
 }
 
+.confirm{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width:100%;
+    height: 100vh;
+    background-color: #040d12c4;
+    z-index: 10;
+    display: none;
+}
+
+.confirm-inner{
+    padding: 1em;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-60%);
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 80% 20%;
+    gap: 2%;
+    border: 1px solid var(--foreground);
+    border-radius: 0.5em;
+    
+    
+}
+
+.confirm-inner > p{
+    text-align: center;
+    word-break: break-all;
+    grid-column: 1/-1;
+    grid-row: 1;
+    overflow-y: auto;
+    color: var(--text);
+}
+
+.confirm-inner button:nth-of-type(1){
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.confirm-inner button:nth-of-type(2){
+    grid-column: 2;
+    grid-row: 2;
+}
 
 .chats{
     display: grid;
@@ -372,20 +454,231 @@ footer{
 }
 
 .mychat , .otherchat{
+
     width: 100%;
     padding: 1em;
     height: fit-content;
     color: var(--text);
+    word-break: break-all;
+    margin-top: 2em;
+
 }
 
-.mychat>h4 , .otherchat>h4{
-    color: var(--text);
+.mychat>h6 , .otherchat>h6{
+    color: var(--foreground);
+    margin-top: 1em;
+}
+
+.mychat>p , .otherchat>p{
+   font-size: medium;
 }
 
 .mychat{
+ 
     text-align: right;
 }
 
 .otherchat{
+ 
     text-align: left;
+}
+
+.taskpanel{
+    width: 80%;
+    height: 80%;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    border: 1px solid var(--foreground);
+
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 10%  90%;
+    color: var(--text);
+
+}
+
+.taskpanel h2:nth-of-type(1){
+    padding: 0.5em;
+    grid-row: 1;
+    grid-column: 1;
+    text-align: center;
+    cursor: pointer;
+}
+
+.taskpanel h2:nth-of-type(2){
+    padding: 0.5em;
+    grid-row: 1;
+    grid-column: 2;
+    text-align: center;
+    cursor: pointer;
+}
+
+.all-tasks{
+    width: 100%;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 90%;
+    padding: 1em;
+    overflow-y: auto;
+    gap: 5%;
+}
+
+.mytaskcont{
+    border-radius: 0.5em;
+    width: 80%;
+    position: relative;
+    left: 10%;
+    background-color: var(--foreground);
+    padding: 1em;
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-auto-rows: 10%;
+ 
+    gap: 2%;
+}
+.mytaskcont > h3{
+    text-align: center;
+    grid-column: 1;
+}
+.mytaskcont > h4{
+    text-align: center;
+    grid-column: 1;
+}
+.mytaskcont > h5{
+    text-align: center;
+    grid-column: 1;
+}
+.mytaskcont > p{
+    grid-column: 1;
+    grid-row: span 4;
+    word-break: break-all;
+    overflow-y: auto;
+    text-align: center;
+
+}
+
+.mytaskcont > label{
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.mytaskcont > label:nth-of-type(1){
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.mytaskcont > label:nth-of-type(2){
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.mytaskcont > textarea {
+    grid-column: 2;
+    grid-row: 4 / span 3;
+    width: 80%;
+    resize: none;
+}
+
+.mytaskcont > input {
+    grid-column: 2;
+    grid-row:2;
+    width: 80%;
+}
+
+.mytaskcont button:nth-of-type(1){
+    grid-column: 2;
+    grid-row: 7;
+    width: 80%;
+}
+
+.mytaskcont button:nth-of-type(2){
+    grid-column: 2;
+    grid-row: 8;
+    width: 80%;
+}
+
+.othertaskcont{
+    border-radius: 0.5em;
+    position: relative;
+    left: 30%;
+    width: 40%;    
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    text-align: center;
+    flex-direction: column;
+    background-color: var(--foreground);
+}
+
+.othertaskcont > img{
+    object-fit: contain;
+    height: 10%;
+    cursor: pointer;
+}
+
+.log-cont{
+    border-radius: 0.5em;
+    border: 1px solid var(--foreground);
+    position: relative;
+    width: 50%;
+    height: 70%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 10%;
+    gap: 0.5em;
+    padding: 1em;
+    overflow-y: auto;
+}
+
+.log-cont > h5{
+    color: var(--text);
+    width: 100%;
+    word-break: break-all;
+}
+
+button{
+    padding: 1em;
+    border: 1px solid var(--text);
+    background-color: var(--background);
+    color: var(--text);
+    cursor: pointer;
+    font-size: medium;
+}
+
+button:hover{
+    border: 1px solid #bbe2d4;
+    color: #bbe2d4;
+    box-shadow: 0 0.1em 0.1em 0 #bbe2d4;
+}
+
+.dashboard{
+    position: relative;
+    left: 10%;
+    width: 80%;
+    padding: 2em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text);
+}
+
+input{
+    background-color: transparent;
+    border: 1px solid var(--foreground);
+    color: var(--text);
+}
+
+textarea{
+    background-color: transparent;
+    color: var(--text);
+    border: 1px solid var(--foreground);
+
 }
